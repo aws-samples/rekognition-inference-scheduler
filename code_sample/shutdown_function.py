@@ -9,7 +9,7 @@ def lambda_handler(event, context):
 
     #Replace ProjectVersionArn paramter with the relevant value
     response = rekognition_client.stop_project_version(
-    ProjectVersionArn='arn:aws:rekognition:us-east-1:333997476486:project/logos_2/version/logos_2.2022-12-08T23.28.31/1670522312291')
+    ProjectVersionArn='arn:aws:rekognition:us-east-1:123456789012:project/logos_2/version/logos_2.2022-12-08T23.28.31/1670522312291')
     
     print(response)
 
