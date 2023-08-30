@@ -19,13 +19,13 @@ With Amazon Rekognition Custom Labels, you can identify the objects, logos, and 
 
 ## Initial Architecture:
 
-![schdeuler_rekognition drawio](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/c25d586c-f7aa-49c8-b8c1-7195cdf99321)
+![schdeuler_rekognition drawio](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/3db09ac4-f33d-4cc4-acb6-e8cac30db5ce)
 
 Consider the usecase where the file to be inferenced on are uploaded to an S3 bucket and S3 event notification adds the newly uploaded objects to an SQS Queue. The queue is subscribed by a Lambda Function, that process and get inferencing result from the Rekognition Custom Label.
 
 ## Recommended Architecture for scheduling:
 
-![schdeuler_rekognition drawio (1)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/b4117a6a-115f-4969-9e41-8d291275883e)
+![schdeuler_rekognition drawio (1)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/b90a016a-e7d2-49ff-94ea-683a5b7d8712)
 
 ## Workflow
 
@@ -46,27 +46,27 @@ Consider the usecase where the file to be inferenced on are uploaded to an S3 bu
 ## Step by Step Implementation Guide:
 Note: The implementation guide assumes that you already have the following architecture implemented:
 
-![schdeuler_rekognition drawio (2)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/b2ef475a-c223-4e16-9cb8-391d93183036)
+![schdeuler_rekognition drawio (2)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/fdace6ab-caef-4f27-9989-4adfbf3f415d)
 
 To implement scheduling for your Rekognition model, please follow the steps below:
 
 1. ### Create IAM role for Lambda Function:
     1. Search for IAM on the search bar in the management console and select IAM
     2. Click on Roles on the Left sidebar
-       ![image (4)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/c969ed36-5aa1-43c1-937f-2683bec88c1d)
+       ![image (4)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/4f5a2622-dfdf-4890-9e11-038021e3d7fd)
     3. Click on Create role:
-       ![image (5)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/8fa63bc3-38e5-4a6b-8965-34f24241ae26)
+       ![image (5)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/9d6b50f6-0f7e-47e6-801b-4a57591f399c)
     4. Select Lambda function:
-       ![image (6)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/86850f65-bcf8-4766-b7a3-de72a47f4850)
+       ![image (6)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/348a5907-05cf-4b5b-885b-c3c5c55f21e0)
     5. Add Permission for Lambda and Rekognition (LambdaFullAccess and RekognitionFullAccess - ensure to further make the permissions more granular based on the access requriements) . Click Create Role (Note the Name of the Role, will be required in the next step)
         
 2. ### Create the Startup Lambda Function:
     1. Search for Lambda on the search bar in the management console and select Lambda from the results.
-       ![image (7)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/1902a66c-fc0f-4dcf-acfa-e817f3e67015)
+       ![image (7)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/7acf168a-5e41-4d5e-baeb-acc9dca90955)
     2. Click on Create Function:
-       ![image (8)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/a5456a27-7367-4ec5-a865-26d5b35a3842)
+       ![image (8)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/1861225f-c170-4613-90fc-126ddbad527f)
     3. Add the Function Name and Runtime, click create Function:
-       ![image (9)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/6e094efa-0423-49c6-b9af-9cb4a7883f47)
+       ![image (9)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/ebfaaf75-481b-4d6c-9f3c-a2c7926abd03)
     4. Import code from startup_function.py (refer code_sample folder in the repository) to the Lambda function. Ensure to replace the following paramters in the code :
         1. Rekognition custom model ARN
         2. Lambda-SQS UUID
@@ -80,16 +80,16 @@ To implement scheduling for your Rekognition model, please follow the steps belo
        
 4. ### Configure EventBridge for Startup Lambda Function
     1. Search for EventBridge on the search bar in the management console and select EventBridge from the results.
-       ![image (10)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/24427fa1-5236-4528-b06d-0a736fa138ec)
+       ![image (10)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/724e5991-1a03-4c74-87e1-5d30d7b38188)
     2. Click on Create Rule:
-       ![image (11)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/aa134cf7-71ef-49c1-80ea-453e23da97a9)
+       ![image (11)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/b36f0d0d-4264-4659-b3be-04da91e0fd8b)
     3. Add the required details to create the rule
-       ![image (12)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/1094d263-b9b1-4efb-8139-62b0c71ff54a)
+       ![image (12)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/6026f974-f8cc-4078-85d1-5f283f2aff1c)
     4. Add cron expression based on your requirement. 
-       ![image (13)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/d3153457-6d29-4c42-b0d2-fbb1123b5809)
+       ![image (13)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/e6eca95b-7603-4237-8ed2-87e04af5c8db)
     5. The above pattern will trigger everyday at 8 AM UTC. Adjust the pattern based on your requirement and timezone.
     6. Select the lambda function as target
-       ![image (14)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/6910047e-5455-4a75-8b9c-1cbb9b79e0da)
+       ![image (14)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/f6dfdcb3-c4f5-436d-a535-7179ad77360d)
     7. Choose Lambda function created in Step 2 from the dropdown.
 
 5. ### Configure EventBridge for Shutdown Lambda Function
