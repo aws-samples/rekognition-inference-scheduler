@@ -39,6 +39,30 @@ Consider the usecase where the file to be inferenced on are uploaded to an S3 bu
 6. Shutdown Lambda Function will remove the event source mapping for the Inference function from the SQS queue.
 7. Shutdown Lambda function makes the call to stop the model using “stop_project_version” API.
 
+## Considerations:
+
+1. Implementing the above architecture will stop processing any new items uploaded after the Event Source Mapping is removed by the Shutdown Lambda Function.
+2. Starting Rekognition Custom Label Model can take upto 30 minutes. Ensure to schedule the Startup Function trigger well in advance to avoid delay.
+3. Items in the queue will not be processed after the Event Source Mapping is removed by the Shutdown Lambda function. These items will be processed after the model is started the next day.
+
+## Step by Step Implementation Guide:
+Note: The implementation guide assumes that you already have the following architecture implemented:
+
+![schdeuler_rekognition drawio (2)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/b2ef475a-c223-4e16-9cb8-391d93183036)
+
+To implement scheduling for your Rekognition model, please follow the steps below:
+
+1. Create IAM role for Lambda Function:
+    1. Search of IAM on the top search bar and select IAM
+    2. Click on Roles on the Left sidebar
+       ![image (4)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/c969ed36-5aa1-43c1-937f-2683bec88c1d)
+    3. Click on Create role:
+       ![image (5)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/8fa63bc3-38e5-4a6b-8965-34f24241ae26)
+    4. Select Lambda function:
+       ![image (6)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/86850f65-bcf8-4766-b7a3-de72a47f4850)
+    5. Add Permission for Lambda and Rekognition. Click Create Role (Note the Name of the Role, will be required in the next step)
+        
+2. Create the startup Lambda Function:
 
 
 
