@@ -1,12 +1,5 @@
 # Optimising Rekognition Custom Labels inferencing cost by shutting down during off-business hours
 
-TODO: Fill this README out!
-
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
-
 ## Overview
 
 Amazon Rekognition is a fully managed AI service provided by AWS. Amazon Rekognition makes it easy to add image and video analysis to your applications.
