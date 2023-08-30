@@ -69,14 +69,14 @@ To implement scheduling for your Rekognition model, please follow the steps belo
        ![image (8)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/a5456a27-7367-4ec5-a865-26d5b35a3842)
     3. Add the Function Name and Runtime, click create Function:
        ![image (9)](https://github.com/aws-samples/rekognition-inference-scheduler/assets/32926625/6e094efa-0423-49c6-b9af-9cb4a7883f47)
-    4. Import code from startup_function.py (refer to code folder in the repository) to the Lambda function. Ensure to replace the following paramters in the code :
+    4. Import code from startup_function.py (refer code_sample folder in the repository) to the Lambda function. Ensure to replace the following paramters in the code :
         1. Rekognition custom model ARN
         2. Lambda-SQS UUID
 
 3. ### Create the Shutdown Lambda Function:
     1. From the Lambda console, click on Create Function (follow steps from the previous section):
     2. Add the Function Name and Runtime, click create Function:
-    4. Import code from shutdown_function.py (refer to code folder in the repository) to the Lambda function. Ensure to replace the following paramters in the code :
+    4. Import code from shutdown_function.py (refer code_sample folder in the repository) to the Lambda function. Ensure to replace the following paramters in the code :
         1. Rekognition custom model ARN
         2. Lambda-SQS UUID  
        
