@@ -1,16 +1,21 @@
-# Optimising Rekognition Custom Labels inferencing cost by shutting down during off-business hours
+# Dynamic AWS Rekognition Custom Labels Inference Scheduler with Event-Driven Decoupling 
 
-## Overview
+This solution is designed to address the challenge of optimizing costs associated with Amazon Rekognition Custom Labels inferencing while ensuring data continuity and seamless operation. By leveraging AWS services, we've developed a robust solution that intelligently manages the inferencing endpoint's availability based on business hours.
+
+**Key Features:**
+- **Cost Optimization:** Our solution dynamically controls the Amazon Rekognition Custom Labels inference endpoint, ensuring it's active only during business hours. This prevents unnecessary costs incurred from running the endpoint 24/7.
+
+- **Automated Scheduling:** We utilize Amazon EventBridge, a serverless event bus, to create and manage scheduled cron jobs. This allows us to programmatically control the inference endpoint's state according to predefined business requirements.
+
+- **Data Continuity:** To ensure uninterrupted processing of events, we've implemented a decoupling mechanism using Amazon SQS (Simple Queue Service). Events generated during off-business hours are captured and stored as messages in the queue. These messages are processed efficiently when the inference endpoint becomes active again, thus safeguarding data and maintaining smooth operations.
+
+
+## Overview of Rekognition
 
 Amazon Rekognition is a fully managed AI service provided by AWS. Amazon Rekognition makes it easy to add image and video analysis to your applications.
 
 With Amazon Rekognition Custom Labels, you can identify the objects, logos, and scenes in images that are specific to your business needs. For example, you can find your logo in social media posts, identify your products on store shelves, classify machine parts in an assembly line, distinguish healthy and infected plants, or detect animated characters in images.
 
-## Introduction:
-
-Many solutions built on Rekognition Custom Labels require an inferencing only during the business hours which leads idle Rekognition inferencing instance after the business hours. For example, the SLA requires inferencing between 9AM and 5 PM everyday.
-
-This AWS Github Sample will help you save on the inference cost for your Rekognition custom label models by scheduling the automatic shut down of the inferencing instance after office hours and turning it on as the workday starts.
 
 ## Initial Architecture:
 
