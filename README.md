@@ -7,7 +7,7 @@ This solution is designed to address the challenge of optimizing costs associate
 
 - **Automated Scheduling:** We utilize Amazon EventBridge, a serverless event bus, to create and manage scheduled cron jobs. This allows us to programmatically control the inference endpoint's state according to predefined business requirements.
 
-- **Data Continuity:** To ensure uninterrupted processing of events, we've implemented a decoupling mechanism using Amazon SQS (Simple Queue Service). Events generated during off-business hours are captured and stored as messages in the queue. These messages are processed efficiently when the inference endpoint becomes active again, thus safeguarding data and maintaining smooth operations.
+- **Data Continuity:** To ensure uninterrupted processing of events, we've implemented a decoupling mechanism using Amazon SQS (Simple Queue Service). Events generated during off-business hours are captured and stored as messages in the queue. These messages are processed efficiently when the inference endpoint becomes active again, thus safeguarding data and maintaining smooth operations without losing any data.
 
 
 ## Overview of Rekognition
@@ -33,7 +33,7 @@ Consider the usecase where the file to be inferenced on are uploaded to an S3 bu
 2. Startup Lambda function makes the call to start the model using “start_project_version” API.
 3. Startup Lambda function enables event source mapping for the source SQS queue and the Inference Lambda function.
 4. Once the Rekognition Custom Label Model is live, Inference Lambda can start running inferencing for the uploaded items.
-5. EventBridge Scheduler Cronjob will trigger the Shutdown function at the scheduled time (end of the day). Ex. 5.00 PM.
+5. EventBridge Scheduler Cronjob will trigger the Shutdown function at the scheduled time (mostly at the end of the day). Ex. 5.00 PM.
 6. Shutdown Lambda Function will remove the event source mapping for the Inference function from the SQS queue.
 7. Shutdown Lambda function makes the call to stop the model using “stop_project_version” API.
 
@@ -42,6 +42,7 @@ Consider the usecase where the file to be inferenced on are uploaded to an S3 bu
 1. Implementing the above architecture will stop processing any new items uploaded after the Event Source Mapping is removed by the Shutdown Lambda Function.
 2. Starting Rekognition Custom Label Model can take upto 30 minutes. Ensure to schedule the Startup Function trigger well in advance to avoid delay.
 3. Items in the queue will not be processed after the Event Source Mapping is removed by the Shutdown Lambda function. These items will be processed after the model is started the next day.
+4. Consider the TPS(transaction per second) required for your usecase. We recommend checking the SQS queue depth regularyly to identify need for increasing inference units.
 
 ## Step by Step Implementation Guide:
 Note: The implementation guide assumes that you already have the following architecture implemented:
